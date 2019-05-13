@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "fs": "0.0.1-security",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "2.1.8",
-    "three": "^0.102.1",
+    "react-scripts": "3.0.1",
+    "three": "^0.104.0",
     "three-orbit-controls": "^82.1.0",
     "three-stl-loader": "^1.0.6"
   },
