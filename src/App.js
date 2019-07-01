@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
-import './App.css';
-//import * as THREE from 'three';
-const THREE = require('three')
-//const STLLoader = require('three-stl-loader')(THREE)
-const OrbitControls = require("three-orbit-controls")(THREE);
+import * as THREE from 'three'
+import {STLLoader} from "three/examples/jsm/loaders/STLLoader";
+import React,{Component} from 'react'
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 class App extends Component {
   constructor(props) {
-
     super(props);
-    //defining functions
     this.animate = this.animate.bind(this);
-    this.addCube = this.addCube.bind(this);
     this.initializeCamera = this.initializeCamera.bind(this);
     this.initializeOrbits = this.initializeOrbits.bind(this);
   }
 componentDidMount() {
-    //screen size
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
-
-    //defining variables
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(100, width / height, 0.1, 1000);
+    const scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.renderer.setSize(width, height);
@@ -30,54 +22,65 @@ componentDidMount() {
     this.initializeOrbits();
     this.initializeCamera();
     
-    //3D Object
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    const material = new THREE.MeshBasicMaterial( { color: 'red', wireframe:true} );
-    this.cube = new THREE.Mesh( geometry, material );
 
-    //Adding 3D Model to the scene
-    this.scene.add( this.cube );
-    this.animate();
+    var loader = new STLLoader();
+				loader.load( 'test.stl', function ( geometry ) {
+					var meshMaterial = new THREE.MeshBasicMaterial({ color: 0x009900, wireframe: true} );
+          console.log(meshMaterial)
 
+          var mesh = new THREE.Mesh( geometry, meshMaterial );
+          console.log( mesh);
+          /* mesh.position.set( 0, - 0.25, 0.6 );
+          mesh.rotation.set( 0, - Math.PI / 2, 0 );
+          mesh.scale.set( 0.5, 0.5, 0.5 ); */
+					/* mesh.position.set( 0, - 0.25, 0.6 );
+					mesh.rotation.set( 0, - Math.PI / 2, 0 );
+					mesh.scale.set( 0.5, 0.5, 0.5 );
+					mesh.castShadow = true;
+					mesh.receiveShadow = true; */
+					scene.add( mesh );
+        },
+        // called when loading is in progresses
+        function ( xhr ) {
+      
+          console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+      
+        },
+        // called when loading has errors
+        function ( error ) {
+      
+          console.log( 'An error : ', error );
+      
+        }
+    
+    );
+
+    this.animate(scene);
   }
 componentWillUnmount() {
     cancelAnimationFrame(this.frameId);
     this.mount.removeChild(this.renderer.domElement);
   }
 initializeOrbits() {
-
     this.controls.rotateSpeed = 1.0;
     this.controls.zoomSpeed = 1.2;
     this.controls.panSpeed = 0.8;
-
   }
 initializeCamera() {
-
     this.camera.position.x = 0;
     this.camera.position.y = 0;
     this.camera.position.z = 4;
-
   }
-animate(cube) {
-
-    this.frameId = window.requestAnimationFrame(this.animate);
-    //-------
-    this.renderer.render(this.scene, this.camera);
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
-
-  }
-addCube(cube) {
-
-    this.scene.add(cube);
-
+animate(scene) {
+    //this.frameId = window.requestAnimationFrame(this.animate);
+    this.renderer.render(scene, this.camera);
   }
 render() {
     return (
       <div>
         <div
           id="boardCanvas"
-          style={{ width: "100%", height: "40vw" }}
+          style={{ width: "80vw", height: "40vw" }}
           ref={mount => {
             this.mount = mount;
           }}
@@ -86,4 +89,5 @@ render() {
     );
   }
 }
+
 export default App;

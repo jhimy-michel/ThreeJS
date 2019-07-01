@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "fs": "0.0.1-security",
+    "halogenium": "^2.2.3",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "3.0.1",
+    "react-three-fiber": "^2.2.5",
     "three": "^0.104.0",
     "three-orbit-controls": "^82.1.0",
     "three-stl-loader": "^1.0.6"
