@@ -7,7 +7,7 @@
     "halogenium": "^2.2.3",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.0.1",
     "react-three-fiber": "^2.2.5",
     "three": "^0.104.0",
     "three-orbit-controls": "^82.1.0",
