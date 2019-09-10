@@ -8,8 +8,16 @@ class App extends Component {
     this.sceneSetup();
     //this.addCustomSceneObjects();
     this.startAnimationLoop();
-    //window.addEventListener('resize', this.handleWindowResize);
+    window.addEventListener('resize', this.handleWindowResize);
   }
+  handleWindowResize = () => {
+    const width = this.el.clientWidth;
+    const height = this.el.clientHeight;
+
+    this.renderer.setSize(width, height);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+  };
   sceneSetup = () => {
     const width = this.el.clientWidth;
     const height = this.el.clientHeight;
