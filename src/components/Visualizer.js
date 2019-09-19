@@ -4,38 +4,42 @@ import React, { useEffect, useRef } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 function Visualizer() {
-  const width = el.clientWidth;
-  const height = el.clientHeight;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75, // fov = field of view
-    width / height, // aspect ratio
-    0.1, // near plane
-    1000 // far plane
-  );
-  const controls = new OrbitControls(camera, el);
-  // set some distance from a cube that is located at z = 0
-  this.camera.position.z = 85;
-  const renderer = new THREE.WebGLRenderer();
-  this.renderer.setSize(width, height);
-  el.appendChild(this.renderer.domElement); // mount using React ref
 
-  const handleWindowResize = () => {
-    const width = el.clientWidth;
-    const height = el.clientHeight;
+  const el = useRef(null);
 
+  useEffect(()=>{
+    let width = el.clientWidth;
+    let height = el.clientHeight;
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(
+      75, // fov = field of view
+      width / height, // aspect ratio
+      0.1, // near plane
+      1000 // far plane
+    );
+    let controls = new OrbitControls(camera, el);
+    // set some distance from a cube that is located at z = 0
+    camera.position.z = 85;
+    let renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  };
-
-  const sceneSetup = () => {
-    /// ------ wiiiiii
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
-      wireframe: true
-    });
-    //const cube = new THREE.Mesh( geometry, material );
+    el.appendChild(renderer.domElement); // mount using React ref
+  
+    let handleWindowResize = () => {
+      let width = el.clientWidth;
+      let height = el.clientHeight;
+  
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+  
+    let sceneSetup = () => {
+      /// ------ wiiiiii
+      let material = new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
+        wireframe: true
+      });
+      //const cube = new THREE.Mesh( geometry, material );
     var loader = new STLLoader();
 
     loader.load(
@@ -73,13 +77,8 @@ function Visualizer() {
     renderer.render(scene, camera);
     var requestID = window.requestAnimationFrame(startAnimationLoop());
   };
-  useEffect(() => {
-    handleWindowResize();
-    sceneSetup();
-    startAnimationLoop();
-    window.addEventListener("resize", handleWindowResize());
-  });
-  const el = useRef(null);
+
+  },[])
 
   return <div style={{ height: "500px" }} ref={el} />;
 }
