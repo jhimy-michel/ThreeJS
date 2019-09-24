@@ -6,8 +6,7 @@ import * as THREE from "three";
 function Visualizer2() {
   const mount = useRef(null);
   const [isAnimating, setAnimating] = useState(true);
-  //const controls = useRef(null);
-  
+  //let controls = useRef(null);
 
   useEffect(() => {
     let width = mount.current.clientWidth;
@@ -17,11 +16,14 @@ function Visualizer2() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe:true });
-    const cube = new THREE.Mesh(geometry, material);
+    //const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xff00ff,
+      wireframe: true
+    });
+    //const cube = new THREE.Mesh(geometry, material);
     //const controls = new OrbitControls(camera, mount);
-    
+
     let loader = new STLLoader();
     loader.load(
       "test.stl",
@@ -70,25 +72,25 @@ function Visualizer2() {
       camera.updateProjectionMatrix();
       renderScene();
     };
+    renderScene();
+    let rotate = () => {
+      let controls = new OrbitControls(camera, mount);
+      controls.update();
+      renderScene();
+    };
 
     mount.current.appendChild(renderer.domElement);
     window.addEventListener("resize", handleResize);
-    //window.addEventListener( 'change', controls );
-
+    window.addEventListener("contextmenu", rotate);
     return () => {
-      //stop();
       window.removeEventListener("resize", handleResize);
-      //window.removeEventListener("change", controls)
-      mount.current.removeChild(renderer.domElement);
-
-      scene.remove(cube);
-      geometry.dispose();
-      material.dispose();
+      window.removeEventListener("contextmenu", rotate);
     };
   }, []);
 
   return (
     <div
+      style={{ height: "500px" }}
       className="vis"
       ref={mount}
       onClick={() => setAnimating(!isAnimating)}
