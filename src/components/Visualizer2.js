@@ -74,11 +74,17 @@ function Visualizer2() {
     };
     renderScene();
     let rotate = () => {
-      let controls = new OrbitControls(camera, mount);
+      let controls = new OrbitControls(camera, renderer);
       controls.update();
+      initializeOrbits();
       renderScene();
     };
 
+    var initializeOrbits = controls => {
+      controls.rotateSpeed = 1.0;
+      controls.zoomSpeed = 1.2;
+      controls.panSpeed = 0.8;
+    };
     mount.current.appendChild(renderer.domElement);
     window.addEventListener("resize", handleResize);
     window.addEventListener("contextmenu", rotate);
