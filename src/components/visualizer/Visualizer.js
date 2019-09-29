@@ -1,20 +1,3 @@
-<<<<<<< HEAD:src/App.js
-import React from "react";
-import Visualizer from "../src/components/Visualizer";
-import Visualizer2 from "../src/components/Visualizer2";
-import { Container, Row, Col } from "reactstrap";
-
-function App() {
-  return (
-    <Container>
-      <Row>
-        <Col>
-          <Visualizer2 />
-        </Col>
-      </Row>
-    </Container>
-  );
-=======
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Component } from "react";
@@ -134,7 +117,6 @@ class Visualizer extends Component {
       />
     );
   }
->>>>>>> d4bba5db2c9f585f8bae8a2f2382b4f90c9868f4:src/components/visualizer/Visualizer.js
 }
 
 export default Visualizer;
