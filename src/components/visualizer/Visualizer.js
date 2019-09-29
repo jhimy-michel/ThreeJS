@@ -2,13 +2,14 @@ import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Component } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { MOUSE } from "three/build/three.module";
 
-class App extends Component {
+class Visualizer extends Component {
   componentDidMount() {
     this.sceneSetup();
     //this.addCustomSceneObjects();
     this.startAnimationLoop();
-    window.addEventListener('resize', this.handleWindowResize);
+    window.addEventListener("resize", this.handleWindowResize);
   }
   handleWindowResize = () => {
     const width = this.el.clientWidth;
@@ -21,6 +22,7 @@ class App extends Component {
   sceneSetup = () => {
     const width = this.el.clientWidth;
     const height = this.el.clientHeight;
+    this.raycaster = new THREE.Raycaster();
 
     this.scene = new THREE.Scene();
 
@@ -51,21 +53,23 @@ class App extends Component {
     loader.load(
       "test.stl",
       geometry => {
-        var mesh = new THREE.Mesh(geometry, this.material);
-        var objBbox = new THREE.Box3().setFromObject(mesh);
+        this.mesh = new THREE.Mesh(geometry, this.material);
+        var objBbox = new THREE.Box3().setFromObject(this.mesh);
+        this.raycaster = new THREE.Raycaster();
+
         console.log(objBbox);
         var bboxCenter = objBbox.getCenter().clone();
         bboxCenter.multiplyScalar(-1);
 
-        mesh.traverse(function(child) {
+        this.mesh.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
             child.geometry.translate(bboxCenter.x, bboxCenter.y, bboxCenter.z);
           }
         });
 
-        objBbox.setFromObject(mesh);
+        objBbox.setFromObject(this.mesh);
 
-        this.scene.add(mesh);
+        this.scene.add(this.mesh);
       },
       // called when loading is in progresses
       function(xhr) {
@@ -78,15 +82,41 @@ class App extends Component {
     );
     //this.scene.add(cube);
   };
+  raycast(e) {
+    this.mouse = { x: 0, y: 0 };
+    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    //console.log(this.mouse);
+    //2. set the picking ray from the camera position and mouse coordinates
+    this.raycaster.setFromCamera(this.mouse, this.camera);
 
+    //3. compute intersections
+    var intersects = this.raycaster.intersectObjects(this.scene.children);
+
+    for (var i = 0; i < intersects.length; i++) {
+      console.log(intersects[i]);
+      this.mesh.material.color.setHex(0xffff00);
+    }
+  }
   startAnimationLoop = () => {
+    //console.log("what up!")
     this.renderer.render(this.scene, this.camera);
     //this.renderer.render( this.scene, this.camera );
     this.requestID = window.requestAnimationFrame(this.startAnimationLoop);
   };
   render() {
-    return <div style={{ height: "500px" }} ref={ref => (this.el = ref)} />;
+    return (
+      <div
+        //onMouseDown={e => this.raycast(e)}
+        //onMouseLeave={e => this.raycast(e)}
+        onMouseDownCapture={e => this.raycast(e)}
+        onMouseUp={() => this.mesh.material.color.setHex(0x00ff00)}
+        //onClick={e => this.raycast(e)}
+        style={{ height: "500px" }}
+        ref={ref => (this.el = ref)}
+      />
+    );
   }
 }
 
-export default App;
+export default Visualizer;

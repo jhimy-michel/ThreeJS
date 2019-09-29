@@ -9,6 +9,7 @@
     "react-dom": "^16.8.4",
     "react-scripts": "^3.0.1",
     "react-three-fiber": "^2.2.5",
+    "reactstrap": "^8.0.1",
     "three": "^0.104.0",
     "three-orbit-controls": "^82.1.0",
     "three-stl-loader": "^1.0.6"
