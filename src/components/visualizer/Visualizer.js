@@ -2,9 +2,15 @@ import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Component } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { MOUSE } from "three/build/three.module";
+import Invisible from "../Invisible";
 
 class Visualizer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true
+    };
+  }
   componentDidMount() {
     this.sceneSetup();
     //this.addCustomSceneObjects();
@@ -98,6 +104,11 @@ class Visualizer extends Component {
       this.mesh.material.color.setHex(0xffff00);
     }
   }
+  invisible = () => {
+    this.mesh.visible = !this.state.visible;
+    console.log(this.mesh);
+    this.setState({ visible: this.mesh.visible });
+  };
   startAnimationLoop = () => {
     //console.log("what up!")
     this.renderer.render(this.scene, this.camera);
@@ -106,15 +117,15 @@ class Visualizer extends Component {
   };
   render() {
     return (
-      <div
-        //onMouseDown={e => this.raycast(e)}
-        //onMouseLeave={e => this.raycast(e)}
-        onMouseDownCapture={e => this.raycast(e)}
-        onMouseUp={() => this.mesh.material.color.setHex(0x00ff00)}
-        //onClick={e => this.raycast(e)}
-        style={{ height: "500px" }}
-        ref={ref => (this.el = ref)}
-      />
+      <>
+        <div
+          onMouseDownCapture={e => this.raycast(e)}
+          onMouseUp={() => this.mesh.material.color.setHex(0x00ff00)}
+          style={{ height: "500px" }}
+          ref={ref => (this.el = ref)}
+        />
+        <Invisible mesh={this.invisible} />
+      </>
     );
   }
 }

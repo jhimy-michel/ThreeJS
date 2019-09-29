@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "reactstrap";
-class Invisible extends Component {
-  render() {
-    return <Button>Invisible</Button>;
-  }
+
+function Invisible(props) {
+    return <Button onClick={props.mesh}>Invisible</Button>;  
 }
 export default Invisible;
