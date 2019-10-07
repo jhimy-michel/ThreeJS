@@ -8,7 +8,8 @@ class Visualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: true
+      visible: true,
+      path:"test.stl"
     };
   }
   componentDidMount() {
@@ -57,7 +58,7 @@ class Visualizer extends Component {
     var loader = new STLLoader();
 
     loader.load(
-      "test.stl",
+      this.state.path,
       geometry => {
         this.mesh = new THREE.Mesh(geometry, this.material);
         var objBbox = new THREE.Box3().setFromObject(this.mesh);

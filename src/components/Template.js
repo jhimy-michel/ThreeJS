@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { Button } from "reactstrap";
+import React from "react";
 import Visualizer from "./visualizer/Visualizer";
 
 function Template() {
