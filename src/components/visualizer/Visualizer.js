@@ -3,13 +3,14 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Component } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Invisible from "../Invisible";
+import Uploader from "../uploader/Uploader";
 
 class Visualizer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: true,
-      path:"test.stl"
+      path: "test.stl"
     };
   }
   componentDidMount() {
@@ -126,6 +127,7 @@ class Visualizer extends Component {
           ref={ref => (this.el = ref)}
         />
         <Invisible mesh={this.invisible} />
+        <Uploader />
       </>
     );
   }

@@ -8,6 +8,7 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-scripts": "^3.0.1",
+    "react-stl-obj-viewer": "^1.2.0",
     "react-three-fiber": "^2.2.5",
     "reactstrap": "^8.0.1",
     "three": "^0.104.0",
