@@ -3,8 +3,8 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import React, { Component } from "react";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import Invisible from "../Invisible";
-import Uploader from "../uploader/Uploader";
-import ThreeFiberLoader from "../ThreeFiberLoader";
+//import Uploader from "../uploader/Uploader";
+//import ThreeFiberLoader from "../ThreeFiberLoader";
 
 class Visualizer extends Component {
   constructor(props) {
@@ -57,12 +57,13 @@ class Visualizer extends Component {
       wireframe: true
     });
     //const cube = new THREE.Mesh( geometry, material );
-    var loader = new STLLoader();
+    /* var loader = new STLLoader();
 
     loader.load(
-      this.state.path,
+      "Fox.stl",
       geometry => {
         this.mesh = new THREE.Mesh(geometry, this.material);
+
         var objBbox = new THREE.Box3().setFromObject(this.mesh);
         this.raycaster = new THREE.Raycaster();
 
@@ -88,7 +89,7 @@ class Visualizer extends Component {
       function(error) {
         console.log("An error : ", error);
       }
-    );
+    ); */
     //this.scene.add(cube);
   };
   raycast(e) {
@@ -118,6 +119,39 @@ class Visualizer extends Component {
     //this.renderer.render( this.scene, this.camera );
     this.requestID = window.requestAnimationFrame(this.startAnimationLoop);
   };
+  loadModels = ({ target }) => {
+    console.log(target.files[0]);
+    var reader = new FileReader();
+    var loader = new STLLoader();
+    reader.readAsArrayBuffer(target.files[0]);
+    reader.onload = () => {
+      console.log(reader.result);
+      var geometry = loader.parse(reader.result);
+      //var mesh = new THREE.Mesh(geometry, this.material);
+      //console.log(mesh);
+      this.mesh = new THREE.Mesh(geometry, this.material);
+
+      var objBbox = new THREE.Box3().setFromObject(this.mesh);
+      this.raycaster = new THREE.Raycaster();
+
+      console.log(objBbox);
+      var bboxCenter = objBbox.getCenter().clone();
+      bboxCenter.multiplyScalar(-1);
+
+      this.mesh.traverse(function(child) {
+        if (child instanceof THREE.Mesh) {
+          child.geometry.translate(bboxCenter.x, bboxCenter.y, bboxCenter.z);
+        }
+      });
+
+      objBbox.setFromObject(this.mesh);
+
+      this.scene.add(this.mesh);
+      // ...
+
+      //        scene.add(mesh);
+    };
+  };
   render() {
     return (
       <>
@@ -127,11 +161,8 @@ class Visualizer extends Component {
           style={{ height: "500px" }}
           ref={ref => (this.el = ref)}
         />
+        <input type="file" onChange={e => this.loadModels(e)}></input>
         <Invisible mesh={this.invisible} />
-        {/* <Uploader /> */}
-        <br></br>
-        <br></br>
-        <ThreeFiberLoader url="/Fox.stl" />
       </>
     );
   }

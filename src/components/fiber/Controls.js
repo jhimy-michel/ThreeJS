@@ -8,9 +8,9 @@ extend({ OrbitControls });
 function Controls() {
   const orbitRef = useRef();
   const { camera, gl } = useThree();
-  useRender(() => {
+  /* useRender(() => {
     orbitRef.current.update();
-  });
+  }); */
   return (
     <orbitControls
       autoRotate

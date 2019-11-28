@@ -1,22 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import STLViewer from "react-stl-obj-viewer";
 import { STLViewer } from "react-stl-obj-viewer";
+//import addBypassChecker from "electron-compile";
+//import STLViewer from "../../three/STLViewer";
 
 function Uploader() {
-  const [file, setFile] = useState([{ name: "" }]);
-  console.log(file);
-  console.log(process.env.REACT_APP_PATH + file[0].name);
+  //const [file, setFile] = useState([{ name: "" }]);
+  const [model, setModel] = useState();
+
+  var onchange = ({ target }) => {
+    console.log(target.files);
+    const { files } = target;
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(files[0]);
+    reader.onload = () => {
+      console.log(reader);
+      setModel(reader.result);
+      //this.setState({ model: reader.result });
+    };
+    /* const addBypassChecker = require("electron-compile").addBypassChecker;
+    addBypassChecker(filePath => {
+      return /\.stl/.test(filePath);
+    }); */
+  };
+  /* useEffect(() => {
+    
+  }, []) */
   return (
     <div>
-      <input type="file" onChange={e => setFile(e.target.files)}></input>
+      <input type="file" onChange={onchange}></input>
       <STLViewer
-        url={process.env.REACT_APP_PATH + file[0].name}
-        width={400}
-        height={400}
         modelColor="#B92C2C"
-        backgroundColor="#EAEAEA"
+        lights={[[0.5, 1, -1], [1, 1, 1]]}
         rotate={true}
-        orbitControls={true}
+        model={model}
       />
     </div>
   );
