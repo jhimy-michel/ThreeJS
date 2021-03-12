@@ -47,7 +47,7 @@
     "postcss-safe-parser": "4.0.1",
     "react": "^16.8.4",
     "react-app-polyfill": "^1.0.1",
-    "react-dev-utils": "^9.0.1",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.8.4",
     "react-spring": "^8.0.27",
     "react-stl-obj-viewer": "^1.2.0",
